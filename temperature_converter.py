@@ -1,3 +1,7 @@
+# Script written by redstoneguy12
+# Github: https://github.com/redstoneguy12/temperature_converter
+
+
 import argparse
 from decimal import Decimal
 from glob import glob
