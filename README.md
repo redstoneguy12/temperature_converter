@@ -4,6 +4,8 @@
 Call it from the command line with the following syntax:
 `python3 temperature_converter.py <temperature scale you want to convert from> <temperature scale you want to convert to> <temperature you want to convert>`  
 
+You can optionally use the switch `--list_all_scales` to get a list of all the scales you can convert to or from.
+
 **Writing extensions:**
 This allows users to create extensions to it to add support for new temperature scales. Extensions should be a python script containing the following variables. The extensions must be in the same directory as the main script in order for them to work.  
 

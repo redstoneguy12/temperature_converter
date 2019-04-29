@@ -7,16 +7,43 @@ from decimal import Decimal
 from glob import glob
 from importlib import import_module
 import os
+import sys
 
-argparser = argparse.ArgumentParser()
-argparser.add_argument("from_system")
-argparser.add_argument("to_system")
-argparser.add_argument("value", type=Decimal)
-args = argparser.parse_args()
+first_parser = argparse.ArgumentParser()
 
-to_system = args.to_system
-from_system = args.from_system
-value = args.value
+first_parser.format_help = lambda: """usage: temperature_converter.py [-h] [--list_all_scales] from_system to_system value
+
+positional arguments:
+  from_system
+  to_system
+  value
+
+optional arguments:
+  -h, --help         show this help message and exit
+  --list_all_scales  This will list all of the scales that are currently
+                     avaliable, including in extensions
+"""
+first_parser.format_usage = lambda: "usage: temperature_converter.py [-h] [--list_all_scales] from_system to_system value"  # noqa
+
+group = first_parser.add_mutually_exclusive_group(required=False)
+group.add_argument("--list_all_scales", action="store_true", help="This will list all of the scales that are currently avaliable, including in extensions")  # noqa
+
+parser_default = argparse.ArgumentParser()
+parser_default.add_argument("from_system")
+parser_default.add_argument("to_system")
+parser_default.add_argument("value", type=Decimal)
+
+parser_default.format_usage = first_parser.format_usage()
+
+args = first_parser.parse_known_args(sys.argv[1:])
+
+if not args[0].list_all_scales:
+    args = parser_default.parse_args()
+    to_system = args.to_system
+    from_system = args.from_system
+    value = args.value
+else:
+    list_all_scales = True
 
 
 # start of conversion functions
@@ -71,6 +98,17 @@ for path in sorted(glob("Temperature_Extension*")):
     abbreviation_dict.update(module.abbreviations)
     to_celsius_dict.update(module.to_celsius_entries)
     from_celsius_dict.update(module.from_celsius_entries)
+
+# check if they specified to list avaliable
+
+if list_all_scales:
+    print("Input systems:")
+    for system in to_celsius_dict.keys():
+        print("\t" + system)
+    print("Output systems:")
+    for system in from_celsius_dict.keys():
+        print("\t" + system)
+    exit()
 
 # convert it
 
