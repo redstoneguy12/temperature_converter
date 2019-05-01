@@ -50,27 +50,27 @@ else:
 # start of conversion functions
 
 def fahrenheit_to_celsius(num):
-    (num - Decimal("32")) * (Decimal("5") / Decimal("9"))
+    return (num - Decimal("32")) * (Decimal("5") / Decimal("9"))
 
 
 def celsius_to_fahrenheit(num):
-    num * (Decimal("9") / Decimal("5")) + Decimal("32")
+    return num * (Decimal("9") / Decimal("5")) + Decimal("32")
 
 
 def kelvin_to_celsius(num):
-    num - Decimal("273.15")
+    return num - Decimal("273.15")
 
 
 def celsius_to_kelvin(num):
-    num + Decimal("273.15")
+    return num + Decimal("273.15")
 
 
 def rankine_to_celsius(num):
-    (num - Decimal("491.67")) / Decimal("1.8")
+    return (num - Decimal("491.67")) / Decimal("1.8")
 
 
 def celsius_to_rankine(num):
-    num * Decimal("1.8") + Decimal("491.67")
+    return num * Decimal("1.8") + Decimal("491.67")
 
 
 # end of conversion functions
