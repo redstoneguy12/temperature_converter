@@ -33,7 +33,7 @@ parser_default.add_argument("from_system")
 parser_default.add_argument("to_system")
 parser_default.add_argument("value", type=Decimal)
 
-parser_default.format_usage = first_parser.format_usage()
+parser_default.format_usage = first_parser.format_usage
 
 args = first_parser.parse_known_args(sys.argv[1:])
 
@@ -42,6 +42,7 @@ if not args[0].list_all_scales:
     to_system = args.to_system
     from_system = args.from_system
     value = args.value
+    list_all_scales = False
 else:
     list_all_scales = True
 
