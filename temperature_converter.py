@@ -6,9 +6,9 @@
 
 from decimal import Decimal
 from glob import glob
-from importlib import import_module
-import os
+import importlib.util
 import sys
+import pathlib
 
 
 class NoScaleError(Exception):
@@ -43,26 +43,31 @@ def celsius_to_rankine(num):
 # end of conversion functions
 
 abbreviation_dict = {
-    "f": "Fahrenheit",
-    "c": "Celsius",
-    "k": "Kelvin",
-    "ra": "Rankine"}
+    "f": "fahrenheit",
+    "c": "celsius",
+    "k": "kelvin",
+    "ra": "rankine"}
 to_celsius_dict = {
-    "Fahrenheit": fahrenheit_to_celsius,
-    "Celsius": lambda x: x,
-    "Kelvin": kelvin_to_celsius,
-    "Rankine": rankine_to_celsius,
+    "fahrenheit": fahrenheit_to_celsius,
+    "celsius": lambda x: x,
+    "kelvin": kelvin_to_celsius,
+    "rankine": rankine_to_celsius,
 }
 from_celsius_dict = {
-    "Fahrenheit": celsius_to_fahrenheit,
-    "Celsius": lambda x: x,
-    "Kelvin": celsius_to_kelvin,
-    "Rankine": celsius_to_rankine}
+    "fahrenheit": celsius_to_fahrenheit,
+    "celsius": lambda x: x,
+    "kelvin": celsius_to_kelvin,
+    "rankine": celsius_to_rankine}
 
 
 def load_extensions():
-    for path in sorted(glob("Temperature_Extension*")):
-        module = import_module(os.path.splitext(path)[0])
+    dir_path = str(pathlib.Path(__file__).parents[0])
+
+    for path in sorted(glob(f"{dir_path}/Temperature_Extension*")):
+        spec = importlib.util.spec_from_file_location('module', path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+
         abbreviation_dict.update(module.abbreviations)
         to_celsius_dict.update(module.to_celsius_entries)
         from_celsius_dict.update(module.from_celsius_entries)
